@@ -60,8 +60,7 @@ class Contact {
     get address() {
       return this._address;
     }
-    set address(address) 
-    {
+    set address(address) {
       //passing address to validateAddressCityState method.
       if (this.validateAddressCityState(address)) {
         this._address = address;
@@ -76,8 +75,7 @@ class Contact {
     }
     set city(city) {
       //passing city to validateAddressCityState method.
-      if (this.validateAddressCityState(city)) 
-      {
+      if (this.validateAddressCityState(city)) {
         this._city = city;
       } else {
         throw "City is incorrect";
@@ -90,8 +88,7 @@ class Contact {
     }
     set state(state) {
       //passing state to validateAddressCityState method.
-      if (this.validateAddressCityState(state)) 
-      {
+      if (this.validateAddressCityState(state)) {
         this._state = state;
       } else {
         throw "State is incorrect";
@@ -135,8 +132,7 @@ class Contact {
       let emailRegex = RegExp(
         "^[0-9a-zA-Z]+([.,+,_,-]{1}[0-9a-zA-Z]+)*@[0-9a-zA-Z]+[.]{1}[a-zA-Z]{2,3}([.]{1}[a-zA-Z]{2})?"
       );
-      if (emailRegex.test(email)) 
-      {
+      if (emailRegex.test(email)) {
         this._email = email;
       } else {
         throw "email is incorrect";
@@ -165,7 +161,7 @@ class Contact {
   }
   
   //prompt message on console for user input.
-  const prompt = require("prompt-sync")({ sigint: true });
+  const prompt = require("prompt-sync")();
   
   //function to create new contact
   createContatct = () => {
@@ -189,6 +185,47 @@ class Contact {
     );
   };
   
+  //function to edit contact
+  editConatct = () => {
+    let firstName = prompt(
+      "Enter First-Name of contact which you want to edit : "
+    );
+    let contact = addressBook.find((contact) => contact.firstName == firstName);
+    if (contact == undefined) {
+      console.log("Contact not found ");
+    } else {
+      try {
+        contact.firstName = prompt("Enter First Name : ");
+        contact.lastName = prompt("Enter last Name : ");
+        contact.address = prompt("Enter Address : ");
+        contact.city = prompt("Enter City : ");
+        contact.state = prompt("Enter State : ");
+        contact.zip = prompt("Enter Zip : ");
+        contact.phoneNumber = prompt("Enter phone number : ");
+        contact.email = prompt("Enter Email address : ");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  //delete contact from addressbook.
+  deleteConatct = () => {
+    let contactName = prompt(
+      "Enter First-Name of contact which you want to delete : "
+    );
+    let isdelete = false;
+    for (var index = 0; index < addressBook.length; index++) {
+      if (addressBook[index].firstName == contactName) {
+        addressBook.splice(index, 1);
+        isdelete = true;
+      }
+    }
+    if (isdelete) {
+      console.log("Contact deleted sucessfully.");
+    } else {
+      console.log("Contact not found.");
+    }
+  };
   //array to store new contact.
   let addressBook = new Array();
   
@@ -197,11 +234,14 @@ class Contact {
   
   let isExit = false;
   while (!isExit) {
-    console.log("1 Add-Contact :\n2 Display-Contact :\n3 Exit :");
+    console.log(
+      "1 Add-Contact :\n2 Display-Contact :\n3 Edit-Contact:\n4 Delete-Contact:\n5 Exit :"
+    );
   
     let userChoice = prompt("Enter the number as per against your choice : ");
     switch (userChoice) {
       case "1":
+        //creating and add new contacts.
         try {
           addressBook.push(createContatct());
         } catch (error) {
@@ -209,9 +249,19 @@ class Contact {
         }
         break;
       case "2":
+        //display all contacts
         console.log(addressBook);
         break;
       case "3":
+        //edit contact
+        editConatct();
+        break;
+      case "4":
+        //deleate contact
+        deleteConatct();
+        break;
+      case "5":
+        //exit from addressbook program
         console.log("Thank You For Using Address-Book.");
         isExit = true;
         break;
