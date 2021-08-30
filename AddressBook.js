@@ -1,4 +1,5 @@
 class Contact {
+    //constructor
     constructor(...params) {
       this.firstName = params[0];
       this.lastName = params[1];
@@ -11,7 +12,7 @@ class Contact {
     }
     //method for validating firstName,lastName.
     validateName(name) {
-      let nameRegex = RegExp("^[A-Z]+[A-z a-z]{3,}$");
+      let nameRegex = RegExp("^[A-Z]{1}[A-z a-z]{2,}$");
       if (nameRegex.test(name)) {
         return true;
       } else {
@@ -25,8 +26,7 @@ class Contact {
     }
     set firstName(firstName) {
       //passsing firstName to validateName method.
-      if (this.validateName(firstName)) 
-      {
+      if (this.validateName(firstName)) {
         this._firstName = firstName;
       } else {
         throw "First name is incorrect";
@@ -37,8 +37,7 @@ class Contact {
     get lastName() {
       return this._lastName;
     }
-    set lastName(lastName) 
-    {
+    set lastName(lastName) {
       //passsing lastName to validateName method.
       if (this.validateName(lastName)) {
         this._lastName = lastName;
@@ -49,7 +48,7 @@ class Contact {
   
     //method for validating address, city, state.
     validateAddressCityState(address) {
-      let addressRegex = RegExp("^[A-Za-z]{4,}$");
+      let addressRegex = RegExp("^[A-za-z]{4,}$");
       if (addressRegex.test(address)) {
         return true;
       } else {
@@ -61,7 +60,8 @@ class Contact {
     get address() {
       return this._address;
     }
-    set address(address) {
+    set address(address) 
+    {
       //passing address to validateAddressCityState method.
       if (this.validateAddressCityState(address)) {
         this._address = address;
@@ -76,7 +76,8 @@ class Contact {
     }
     set city(city) {
       //passing city to validateAddressCityState method.
-      if (this.validateAddressCityState(city)) {
+      if (this.validateAddressCityState(city)) 
+      {
         this._city = city;
       } else {
         throw "City is incorrect";
@@ -89,7 +90,8 @@ class Contact {
     }
     set state(state) {
       //passing state to validateAddressCityState method.
-      if (this.validateAddressCityState(state)) {
+      if (this.validateAddressCityState(state)) 
+      {
         this._state = state;
       } else {
         throw "State is incorrect";
@@ -133,13 +135,13 @@ class Contact {
       let emailRegex = RegExp(
         "^[0-9a-zA-Z]+([.,+,_,-]{1}[0-9a-zA-Z]+)*@[0-9a-zA-Z]+[.]{1}[a-zA-Z]{2,3}([.]{1}[a-zA-Z]{2})?"
       );
-      if (emailRegex.test(email)) {
+      if (emailRegex.test(email)) 
+      {
         this._email = email;
       } else {
         throw "email is incorrect";
       }
     }
-  
     toString() {
       return (
         "First-Name = " +
@@ -161,18 +163,60 @@ class Contact {
       );
     }
   }
-  try {
-    let contact = new Contact(
-      "Meenakshi",
-      "Sabde",
-      "Basavakalyan",
-      "Bidar",
-      "Karnataka",
-        585403,
-      "91 7406998045",
-      "meenakshi@gmail.com"
+  
+  //prompt message on console for user input.
+  const prompt = require("prompt-sync")({ sigint: true });
+  
+  //function to create new contact
+  createContatct = () => {
+    let firstName = prompt("Enter First Name : ");
+    let lastName = prompt("Enter last Name : ");
+    let address = prompt("Enter Address : ");
+    let city = prompt("Enter City : ");
+    let state = prompt("Enter State : ");
+    let zip = prompt("Enter Zip : ");
+    let phoneNumber = prompt("Enter phone number : ");
+    let email = prompt("Enter Email address : ");
+    return new Contact(
+      firstName,
+      lastName,
+      address,
+      city,
+      state,
+      zip,
+      phoneNumber,
+      email
     );
-    console.log(contact.toString());
-  } catch (error) {
-    console.error(error);
+  };
+  
+  //array to store new contact.
+  let addressBook = new Array();
+  
+  //user choice and calling functions.
+  console.log("Welcome to address book");
+  
+  let isExit = false;
+  while (!isExit) {
+    console.log("1 Add-Contact :\n2 Display-Contact :\n3 Exit :");
+  
+    let userChoice = prompt("Enter the number as per against your choice : ");
+    switch (userChoice) {
+      case "1":
+        try {
+          addressBook.push(createContatct());
+        } catch (error) {
+          console.error(error);
+        }
+        break;
+      case "2":
+        console.log(addressBook);
+        break;
+      case "3":
+        console.log("Thank You For Using Address-Book.");
+        isExit = true;
+        break;
+      default:
+        console.log("Invalid Option");
+        break;
+    }
   }
